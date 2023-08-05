@@ -2,4 +2,4 @@
 catch2/3.4.0
 sfml/2.5.1
 [generators]
-cmake
+CMakeToolchain
