@@ -11,14 +11,14 @@ file(GLOB files
      "src/*.cpp"
 )
 
-file(COPY_FILE conanfile.txt ${CMAKE_BINARY_DIR}/conanfile.txt)
+#file(COPY_FILE conanfile.txt ${CMAKE_BINARY_DIR}/conanfile.txt)
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+#include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+#conan_basic_setup()
 
 add_executable(Application ${files})
 target_include_directories(Application PRIVATE src)
-target_link_libraries(Application ${CONAN_LIBS})
+#target_link_libraries(Application ${CONAN_LIBS})
 
 
 
