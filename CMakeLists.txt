@@ -23,5 +23,3 @@ target_link_libraries(Application sfml-graphics sfml-audio)
 
 
 
-
-
