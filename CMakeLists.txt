@@ -12,13 +12,14 @@ file(GLOB files
 )
 
 file(COPY_FILE conanfile.txt ${CMAKE_BINARY_DIR}/conanfile.txt)
+set(CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR};${CMAKE_PREFIX_PATH}")
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+find_package(SFML 2.5.1 COMPONENTS graphics audio REQUIRED)
+find_package(Catch2 3 REQUIRED)
 
 add_executable(Application ${files})
 target_include_directories(Application PRIVATE src)
-target_link_libraries(Application ${CONAN_LIBS})
+target_link_libraries(Application sfml-graphics sfml-audio)
 
 
 
