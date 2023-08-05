@@ -11,16 +11,10 @@ file(GLOB files
      "src/*.cpp"
 )
 
-if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-   message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-   file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/master/conan.cmake"
-                  "${CMAKE_BINARY_DIR}/conan.cmake")
-endif()
+file(COPY_FILE conanfile.txt ${CMAKE_BINARY_DIR}/conanfile.txt)
 
-include(${CMAKE_BINARY_DIR}/conan.cmake)
-
-conan_cmake_run(REQUIRES catch2/3.4.0 sfml/2.5.1
-                BASIC_SETUP)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 add_executable(Application ${files})
 target_include_directories(Application PRIVATE src)
