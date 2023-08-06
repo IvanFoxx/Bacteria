@@ -11,6 +11,12 @@ file(GLOB files
      "src/*.cpp"
 )
 
+file(GLOB tests
+     "test/*.cpp"
+)
+
+set(testfiles ${files})
+
 file(COPY_FILE conanfile.txt ${CMAKE_BINARY_DIR}/conanfile.txt)
 set(CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR};${CMAKE_PREFIX_PATH}")
 set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR};${CMAKE_MODULE_PATH}")
@@ -19,9 +25,24 @@ find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
 find_package(Catch2 3 REQUIRED)
 find_package(Eigen3 REQUIRED)
 
+list(REMOVE_ITEM testfiles ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
+message(${testfiles})
+
 add_executable(Application ${files})
 target_include_directories(Application PRIVATE src)
 target_link_libraries(Application sfml::sfml Eigen3::Eigen)
+
+add_executable(ApplicationTests ${testfiles} ${tests})
+target_include_directories(ApplicationTests PRIVATE src)
+target_link_libraries(ApplicationTests Eigen3::Eigen sfml::sfml Catch2::Catch2WithMain)
+
+enable_testing()
+
+add_test(NAME Tests COMMAND ApplicationTests)
+
+install(TARGETS Application RUNTIME)
+install(TARGETS ApplicationTests RUNTIME)
 
 
 
