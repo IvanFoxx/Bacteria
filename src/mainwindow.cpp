@@ -1,6 +1,6 @@
 #include "mainwindow.hpp"
 
-void MainWindow::EventHandle(sf::Event &e) {
+void MainWindow::EventHandle(sf::Event& e) {
   if (e.type == sf::Event::MouseWheelScrolled) {
     transformer_.ScaleCamera(e.mouseWheelScroll.delta);
   }
@@ -24,9 +24,35 @@ void MainWindow::EventHandle(sf::Event &e) {
   }
 }
 
-void MainWindow::RenderFood() {}
+void MainWindow::RenderFood() {
+  for (auto&& p : simulation_.GetField().GetEats()) {
+    float radius = transformer_.Scale(10);
+    sf::CircleShape shape(radius);
+    shape.setFillColor(sf::Color::Yellow);
+    shape.setOrigin(radius, radius);
+    sf::Vector2f after(transformer_.ScaleW(p->GetX()),
+                       transformer_.ScaleH(p->GetY()));
+    if (after.x < 0.0 || after.x > width_ || after.y < 0.0 || after.y > height_)
+      continue;
+    shape.setPosition(after);
+    window_.draw(shape);
+  }
+}
 
-void MainWindow::RenderBactery() {}
+void MainWindow::RenderBactery() {
+  for (auto&& p : simulation_.GetField().GetBacterium()) {
+    float radius = transformer_.Scale(10);
+    sf::CircleShape shape(radius);
+    shape.setFillColor(sf::Color::Green);
+    shape.setOrigin(radius, radius);
+    sf::Vector2f after(transformer_.ScaleW(p->GetX()),
+                       transformer_.ScaleH(p->GetY()));
+    if (after.x < 0.0 || after.x > width_ || after.y < 0.0 || after.y > height_)
+      continue;
+    shape.setPosition(after);
+    window_.draw(shape);
+  }
+}
 
 MainWindow::MainWindow(size_t width, size_t height)
     : transformer_(width, height),
@@ -34,6 +60,7 @@ MainWindow::MainWindow(size_t width, size_t height)
       width_(width),
       height_(height) {
   window_.setFramerateLimit(60);
+  simulation_.InitRandomly();
 }
 
 int MainWindow::MainLoop() {
@@ -63,100 +90,51 @@ int MainWindow::MainLoop() {
     RenderBactery();
 
     window_.display();
+
+    simulation_.Run(1.0 / 60);
   }
 
   return 0;
 }
-
-/*
-planets = std::move(core->LoadState());
-
-  for (auto&& p : planets) {
-    auto pos = p.GetPositionV();
-    number radius = std::max<number>(1.0, transformer.Scale(p.GetRadius()));
-    sf::CircleShape shape(radius, std::min<number>(radius + 4, 30));
-     shape.setOrigin(radius, radius);
-     sf::Vector2f after(transformer.ScaleW(pos.x),
- transformer.ScaleH(pos.y)); if (after.x < 0.0 || after.x > width || after.y
- < 0.0 || after.y > height) continue; shape.setPosition(after);
-     window.draw(shape);
-     auto radius_transform = [=]() -> number {
-       if (radius > 15) return radius;
-       return 15;
-     };
-     if (text_e)
-       DrawText(p.name, sf::Color::Red, radius_transform(),
-                {after.x, after.y - (float)radius}, {0.5, 1.35});
-   }
- }
-*/
-
 /*
 if (core.get() == nullptr) {
   RenderFileMenu();
   return;
 }
 
- std::string time_dump;
-
- sf::Event e;
- while (window.pollEvent(e)) {
-   if (!console_e) {
-     EventHandle(e);
-     if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::T)
-       text_e = !text_e;
-   } else {
-     if (e.type == sf::Event::KeyPressed && console_e == true &&
-         key_map.count(e.key.code) == 1)
-       console.PushLetter(key_map.at(e.key.code));
-     if (e.type == sf::Event::KeyPressed && console_e == true &&
-         e.key.code == sf::Keyboard::Backspace)
-       console.BackSpace();
-   }
-   if (e.type == sf::Event::KeyPressed &&
-       e.key.code == sf::Keyboard::Enter) {
-     if (console_e) console.Enter();
-     console_e = !console_e;
-   }
-   if (e.type == sf::Event::Closed) window.close();
- }
-
- window.clear();
-
- if (core->IsLoading()) {
-   DrawText(std::to_string(core->GetProgress()), sf::Color::Red, 40,
-            {width / 2.0f, height / 2.0f}, {0.5, 0.5});
-   window.display();
-   return;
- }
-
- DrawText(core->GetTimeDump(), sf::Color::White, 20);
-
- if (console_e) DrawText(console.Text(), sf::Color::White, 20, {0, 400});
-
- if (core->SlowDownWarning())
-   DrawText("Slow down error", sf::Color::Red, 40,
-            {width / 2.0f, height / 2.0f}, {0.5, 1.35});
-
- DrawText(std::to_string(core->GetSpeed()), sf::Color::Red, 20,
-          {static_cast<float>(width), 0}, {1, 0});
-
- RenderPlanets();
-
- window.display();
-*/
-
-void DrawText(std::string txt, sf::Color color, size_t size,
-              sf::Vector2f position, sf::Vector2f relative_origin) {
-  /*
-  sf::Text text(txt, mfont, size);
-  text.setFillColor(color);
-  text.setStyle(sf::Text::Bold);
-
-   sf::FloatRect textRect = text.getLocalBounds();
-   text.setOrigin(textRect.width * relative_origin.x,
-                  textRect.height * relative_origin.y);
-   text.setPosition(position.x, position.y);
-   window.draw(text);
- */
+if (core->IsLoading()) {
+  DrawText(std::to_string(core->GetProgress()), sf::Color::Red, 40,
+           {width / 2.0f, height / 2.0f}, {0.5, 0.5});
+  window.display();
+  return;
 }
+
+DrawText(core->GetTimeDump(), sf::Color::White, 20);
+
+if (console_e) DrawText(console.Text(), sf::Color::White, 20, {0, 400});
+
+if (core->SlowDownWarning())
+  DrawText("Slow down error", sf::Color::Red, 40, {width / 2.0f, height / 2.0f},
+           {0.5, 1.35});
+
+DrawText(std::to_string(core->GetSpeed()), sf::Color::Red, 20,
+         {static_cast<float>(width), 0}, {1, 0});
+
+RenderPlanets();
+
+window.display();
+
+    void DrawText(std::string txt, sf::Color color, size_t size,
+                  sf::Vector2f position, sf::Vector2f relative_origin) {
+*/
+/*
+sf::Text text(txt, mfont, size);
+text.setFillColor(color);
+text.setStyle(sf::Text::Bold);
+
+ sf::FloatRect textRect = text.getLocalBounds();
+ text.setOrigin(textRect.width * relative_origin.x,
+                textRect.height * relative_origin.y);
+ text.setPosition(position.x, position.y);
+ window.draw(text);
+*/
