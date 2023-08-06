@@ -78,7 +78,7 @@ void Simulation::InitNewGeneration() {
   for (size_t i = 0; i < 4; ++i)
     for (size_t j = 0; j < 25; ++j) PushBactery(*dead_[i]);
 
-  for (size_t i = 90; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
+  // for (size_t i = 90; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
 
   for (size_t i = 0; i < 100; i++) {
     auto f = Food(GetField());
