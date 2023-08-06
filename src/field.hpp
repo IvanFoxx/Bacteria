@@ -8,6 +8,7 @@ class Food;
 class Bacterium;
 
 class Field {
+ public:
   std::vector<std::shared_ptr<Food>> &GetEats();
   std::vector<std::shared_ptr<Bacterium>> &GetBacterium();
 
