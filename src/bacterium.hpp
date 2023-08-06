@@ -20,7 +20,7 @@ class Bacterium {
  private:
   const Field &field_;
   float x_, y_;
-  float energy_;
+  float energy_ = 100;
 };
 
 #endif

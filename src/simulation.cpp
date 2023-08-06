@@ -14,6 +14,13 @@ void Simulation::PushFood(const Food &bacterium) {
 
 void Simulation::Run(float delta_time) {
   for (auto &bactery : field_.GetBacterium()) bactery->Play(delta_time);
+  auto it =
+      std::remove_if(field_.GetBacterium().begin(), field_.GetBacterium().end(),
+                     [](auto b) { return b->GetEnergy() <= 0; });
+
+  for (auto i = it; i != field_.GetBacterium().end(); ++i) dead_.push_back(*it);
+
+  field_.GetBacterium().erase(it, field_.GetBacterium().end());
 }
 
 void Simulation::InitRandomly() {

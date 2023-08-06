@@ -17,6 +17,8 @@ void Bacterium::Play(float delta_time) {
 
   x_ = std::max<float>(x_, -field_.GetRange());
   y_ = std::max<float>(y_, -field_.GetRange());
+
+  energy_ -= 5 * delta_time;
 }
 
 void Bacterium::PlaceRandomly() {
@@ -24,4 +26,5 @@ void Bacterium::PlaceRandomly() {
   y_ = rand() % (2 * field_.GetRange()) - field_.GetRange();
   x_ /= 1.1;
   y_ /= 1.1;
+  energy_ = rand() % 60 + 40;
 }

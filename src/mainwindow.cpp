@@ -30,6 +30,8 @@ void MainWindow::RenderFood() {
     sf::CircleShape shape(radius);
     shape.setFillColor(sf::Color::Yellow);
     shape.setOrigin(radius, radius);
+    // shape.setOutlineColor(sf::Color::White);
+    // shape.setOutlineThickness(transformer_.Scale(2));
     sf::Vector2f after(transformer_.ScaleW(p->GetX()),
                        transformer_.ScaleH(p->GetY()));
     if (after.x < 0.0 || after.x > width_ || after.y < 0.0 || after.y > height_)
@@ -41,9 +43,11 @@ void MainWindow::RenderFood() {
 
 void MainWindow::RenderBactery() {
   for (auto&& p : simulation_.GetField().GetBacterium()) {
-    float radius = transformer_.Scale(10);
+    float radius = transformer_.Scale(20 * p->GetEnergy() / 100);
     sf::CircleShape shape(radius);
     shape.setFillColor(sf::Color::Green);
+    // shape.setOutlineColor(sf::Color::White);
+    // shape.setOutlineThickness(transformer_.Scale(2));
     shape.setOrigin(radius, radius);
     sf::Vector2f after(transformer_.ScaleW(p->GetX()),
                        transformer_.ScaleH(p->GetY()));
@@ -69,7 +73,9 @@ int MainWindow::MainLoop() {
   float range = simulation_.GetField().GetRange();
   sf::RectangleShape scene;
 
-  scene.setFillColor(sf::Color(125, 125, 125));
+  scene.setOutlineColor(sf::Color(125, 125, 125));
+  scene.setFillColor(sf::Color(40, 40, 40));
+  scene.setOutlineThickness(2);
 
   while (window_.isOpen()) {
     sf::Event event;
