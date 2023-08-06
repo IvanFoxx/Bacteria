@@ -1,5 +1,7 @@
 [requires]
 catch2/3.4.0
 sfml/2.5.1
+eigen/3.3.7
+
 [generators]
 CMakeDeps
