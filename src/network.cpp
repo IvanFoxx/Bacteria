@@ -9,11 +9,6 @@ Network::Network(int layers, std::vector<int> layers_d) {
   for (int i = 0; i < layers - 1; i++) {
     network[i] = Eigen::MatrixXf(layers_d[i], layers_d[i + 1]);
     offset[i] = Eigen::VectorXf(layers_d[i + 1]);
-    for (int x = 0; x < layers_d[i] + 1; x++) {
-      for (int y = 0; y < layers_d[i + 1]; y++) {
-        network[i](x, y) = (rand() % 200 - 100) / 100;
-      }
-    }
   }
 }
 

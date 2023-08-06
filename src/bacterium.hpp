@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "field.hpp"
+#include "network.hpp"
 
 class Bacterium {
  public:
@@ -21,6 +22,7 @@ class Bacterium {
   const Field &field_;
   float x_, y_;
   float energy_;
+  Network network_ = Network(3, {5, 10, 2});
 };
 
 #endif

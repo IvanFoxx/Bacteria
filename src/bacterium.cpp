@@ -24,4 +24,12 @@ void Bacterium::PlaceRandomly() {
   y_ = rand() % (2 * field_.GetRange()) - field_.GetRange();
   x_ /= 1.1;
   y_ /= 1.1;
+  for (int i = 0; i < network_.Layer_Count - 1; i++) {
+    for (int y = 0; y < network_.Layers_Dim[i + 1]; y++) {
+      network_.offset[i](y) = (rand() % 200 - 100) / 100;
+      for (int x = 0; x < network_.Layers_Dim[i]; x++) {
+        network_.network[i](x, y) = (rand() % 200 - 100) / 100;
+      }
+    }
+  }
 }
