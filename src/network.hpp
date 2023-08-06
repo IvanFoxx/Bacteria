@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NETWORK_HPP
+#define NETWORK_HPP
+
 #include <vector>
 
 #include "lmath.hpp"
@@ -15,3 +17,5 @@ class Network {
 
   Eigen::VectorXf execute(Eigen::VectorXf input);
 };
+
+#endif
