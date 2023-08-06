@@ -7,15 +7,18 @@
 
 class Network {
  public:
-  int Layer_Count;
-  std::vector<int> Layers_Dim;
-  std::vector<Eigen::MatrixXf> network;
-  std::vector<Eigen::VectorXf> offset;
+  Network(std::vector<int> layers_sizes);
+  Network(const Network& other) = default;
 
-  Network(int layers, std::vector<int> layers_d);
-  Network(const Network& other);
+  Eigen::VectorXf Calculate(Eigen::VectorXf input) const;
 
-  Eigen::VectorXf execute(Eigen::VectorXf input);
+  void GenerateRandomly();
+  void GenerateMutation();
+
+ private:
+  std::vector<int> layers_size_;
+  std::vector<Eigen::MatrixXf> matrixes_;
+  std::vector<Eigen::VectorXf> offsets_;
 };
 
 #endif
