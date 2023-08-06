@@ -1,5 +1,7 @@
 #include "simulation.hpp"
 
+const float radius = 10;
+
 Simulation::Simulation() {}
 
 void Simulation::PushBactery(const Bacterium &bacterium) {
@@ -19,8 +21,30 @@ void Simulation::Run(float delta_time) {
                      [](auto b) { return b->GetEnergy() <= 0; });
 
   for (auto i = it; i != field_.GetBacterium().end(); ++i) dead_.push_back(*it);
-
   field_.GetBacterium().erase(it, field_.GetBacterium().end());
+
+  for (auto b : field_.GetBacterium()) {
+    for (auto e : field_.GetEats()) {
+      if (abs(b->GetX() - e->GetX()) < radius &&
+          abs(b->GetY() - e->GetY()) < radius) {
+        e->SetAlive(false);
+        b->PushEnergy(100);
+      }
+    }
+  }
+
+  auto ite = std::remove_if(field_.GetEats().begin(), field_.GetEats().end(),
+                            [](auto b) { return b->GetAlive() == false; });
+  field_.GetEats().erase(ite, field_.GetEats().end());
+
+  from_last_food_spawn_ += delta_time;
+
+  if (from_last_food_spawn_ > 2) {
+    auto f = Food(GetField());
+    f.PlaceRandomly();
+    PushFood(f);
+    from_last_food_spawn_ = 0;
+  }
 }
 
 void Simulation::InitRandomly() {

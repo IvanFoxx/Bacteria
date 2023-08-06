@@ -9,11 +9,14 @@ class Food {
 
   float GetX() const;
   float GetY() const;
+  bool GetAlive() const;
+  void SetAlive(bool alive);
 
   void PlaceRandomly();
 
  private:
   float x_, y_;
+  bool alive_ = true;
   const Field &field_;
 };
 

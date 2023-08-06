@@ -18,6 +18,7 @@ class Simulation {
   const Field& GetField() const;
 
  private:
+  float from_last_food_spawn_ = 0;
   Field field_;
   std::vector<std::shared_ptr<Bacterium>> dead_;
 };

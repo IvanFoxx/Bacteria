@@ -13,6 +13,7 @@ class Bacterium {
   float GetX() const;
   float GetY() const;
   float GetEnergy() const;
+  void PushEnergy(float energy);
 
   void Play(float delta_time);
   void PlaceRandomly();
