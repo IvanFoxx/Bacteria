@@ -34,7 +34,7 @@ void Bacterium::Play(float delta_time) {
   y_ = std::max<float>(y_, -field_.GetRange());
 
   energy_ -= 5 * delta_time;
-  energy_ = std::min<float>(energy_, 1000);
+  // energy_ = std::min<float>(energy_, 1000);
   energy_ = std::max<float>(energy_, 0);
 }
 

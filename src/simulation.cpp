@@ -46,12 +46,12 @@ void Simulation::Run(float delta_time) {
   from_epoch_start += delta_time;
   from_last_food_spawn_ += delta_time;
 
-  if (from_last_food_spawn_ > 2) {
-    auto f = Food(GetField());
-    f.PlaceRandomly();
-    PushFood(f);
-    from_last_food_spawn_ = 0;
-  }
+  // if (from_last_food_spawn_ > 2) {
+  //  auto f = Food(GetField());
+  //  f.PlaceRandomly();
+  //  PushFood(f);
+  // from_last_food_spawn_ = 0;
+  // }
   if (field_.GetBacterium().empty()) InitNewGeneration();
 }
 
@@ -75,12 +75,12 @@ void Simulation::InitNewGeneration() {
   field_.GetBacterium().clear();
   field_.GetEats().clear();
 
-  for (size_t i = 0; i < 4; ++i)
-    for (size_t j = 0; j < 25; ++j) PushBactery(*dead_[i]);
+  for (size_t i = 90; i < 100; ++i)
+    for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);
 
-  // for (size_t i = 90; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
+  for (size_t i = 0; i < 10; i++) field_.GetBacterium()[i]->RandomGen();
 
-  for (size_t i = 0; i < 100; i++) {
+  for (size_t i = 0; i < 1000; i++) {
     auto f = Food(GetField());
     f.PlaceRandomly();
     PushFood(f);
