@@ -13,3 +13,5 @@ const std::vector<std::shared_ptr<Food> > &Field::GetEats() const {
 const std::vector<std::shared_ptr<Bacterium> > &Field::GetBacterium() const {
   return bacteria_;
 }
+
+int Field::GetRange() const { return map_range_; }
