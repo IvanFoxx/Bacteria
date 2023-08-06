@@ -9,7 +9,7 @@ class Simulation {
  public:
   Simulation();
 
-  void PushBactery(std::shared_ptr<Bacterium> b);
+  void PushBactery(Bacterium b);
   void PushFood(const Food& bacterium);
 
   void Run(float delta_time);
@@ -20,6 +20,7 @@ class Simulation {
 
  private:
   float from_last_food_spawn_ = 0;
+  float from_epoch_start = 0;
   Field field_;
   std::vector<std::shared_ptr<Bacterium>> dead_;
 };

@@ -40,7 +40,7 @@ void Network::GenerateRandomly() {
 }
 
 void Network::GenerateMutation() {
-  for (size_t i = 0; i < 20; i++) {
+  for (size_t i = 0; i < 3; i++) {
     auto delta = ((rand() % 2000) - 1000) / 10000.0;
     auto id = rand() % (matrixes_.size() - 1);
     auto y = rand() % matrixes_[id].rows();
@@ -49,19 +49,10 @@ void Network::GenerateMutation() {
     matrixes_[id](y, x) += delta;
   }
 
-  for (size_t i = 0; i < 20; i++) {
+  for (size_t i = 0; i < 3; i++) {
     auto delta = ((rand() % 2000) - 1000) / 10000.0;
     auto id = rand() % (offsets_.size() - 1);
     auto y = rand() % matrixes_[id].rows();
     offsets_[id](y) += delta;
   }
-
-  for (size_t i = 0; i < matrixes_.size() - 1; i++)
-    for (int y = 0; y < matrixes_[i].rows(); y++)
-      for (int x = 0; x < matrixes_[i].cols(); x++)
-        matrixes_[i](y, x) = ((rand() % 2000) - 1000) / 1000.0;
-
-  for (size_t i = 0; i < offsets_.size() - 1; i++)
-    for (int y = 0; y < offsets_[i].size(); y++)
-      offsets_[i](y) = ((rand() % 2000) - 1000) / 1000.0;
 }
