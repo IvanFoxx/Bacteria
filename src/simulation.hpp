@@ -14,6 +14,7 @@ class Simulation {
 
   void Run(float delta_time);
   void InitRandomly();
+  void InitNewGeneration();
 
   const Field& GetField() const;
 

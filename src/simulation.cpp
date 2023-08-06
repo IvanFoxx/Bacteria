@@ -45,6 +45,7 @@ void Simulation::Run(float delta_time) {
     PushFood(f);
     from_last_food_spawn_ = 0;
   }
+  if (field_.GetBacterium().empty()) InitNewGeneration();
 }
 
 void Simulation::InitRandomly() {
@@ -58,6 +59,12 @@ void Simulation::InitRandomly() {
     f.PlaceRandomly();
     PushFood(f);
   }
+}
+
+void Simulation::InitNewGeneration() {
+  field_.GetBacterium().clear();
+  field_.GetEats().clear();
+  InitRandomly();
 }
 
 const Field &Simulation::GetField() const { return field_; }
