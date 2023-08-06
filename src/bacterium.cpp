@@ -1,6 +1,7 @@
 #include "bacterium.hpp"
 
-Bacterium::Bacterium(const Field &field) : field_(field) {}
+Bacterium::Bacterium(const Field &field)
+    : field_(field), network_({10, 8, 8, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -11,14 +12,17 @@ float Bacterium::GetEnergy() const { return energy_; }
 void Bacterium::PushEnergy(float energy) { energy_ += energy; }
 
 void Bacterium::Play(float delta_time) {
-  //  x_ += (rand() % 101 - 50) * delta_time;
-  //  y_ += (rand() % 101 - 50) * delta_time;
+  Eigen::VectorXf input(10);
+  input(0) = energy_;
+  input(1) = x_;
+  input(2) = y_;
 
-  auto angle = (rand() % 360) / 360.0 * 2 * 3.14;
-  auto speed = 100.0;
+  auto output = network_.Calculate(input);
+  auto speed_x = 5 * output(0);
+  auto speed_y = 5 * output(1);
 
-  x_ += speed * sin(angle) * delta_time;
-  y_ += speed * cos(angle) * delta_time;
+  x_ += speed_x;
+  y_ += speed_y;
 
   x_ = std::min<float>(x_, field_.GetRange());
   y_ = std::min<float>(y_, field_.GetRange());
@@ -35,14 +39,8 @@ void Bacterium::PlaceRandomly() {
   x_ /= 1.1;
   y_ /= 1.1;
   energy_ = rand() % 60 + 40;
-  /*
-  for (int i = 0; i < network_.Layer_Count - 1; i++) {
-    for (int y = 0; y < network_.Layers_Dim[i + 1]; y++) {
-      network_.offset[i](y) = (rand() % 200 - 100) / 100;
-      for (int x = 0; x < network_.Layers_Dim[i]; x++) {
-        network_.network[i](x, y) = (rand() % 200 - 100) / 100;
-      }
-    }
-  }
-*/
 }
+
+void Bacterium::Mutation() { network_.GenerateMutation(); }
+
+void Bacterium::RandomGen() { network_.GenerateRandomly(); }

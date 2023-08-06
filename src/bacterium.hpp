@@ -18,12 +18,14 @@ class Bacterium {
 
   void Play(float delta_time);
   void PlaceRandomly();
+  void Mutation();
+  void RandomGen();
 
  private:
   const Field &field_;
   float x_, y_;
   float energy_ = 100;
-  // Network network_
+  Network network_;
 };
 
 #endif

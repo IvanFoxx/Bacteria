@@ -9,7 +9,7 @@ class Simulation {
  public:
   Simulation();
 
-  void PushBactery(const Bacterium& bacterium);
+  void PushBactery(std::shared_ptr<Bacterium> b);
   void PushFood(const Food& bacterium);
 
   void Run(float delta_time);
