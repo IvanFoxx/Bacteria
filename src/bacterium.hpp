@@ -14,8 +14,11 @@ class Bacterium {
   float GetY() const;
   float GetEnergy() const;
 
+  void Play(float delta_time);
+  void PlaceRandomly();
+
  private:
-  const Field &field;
+  const Field &field_;
   float x_, y_;
   float energy_;
 };
