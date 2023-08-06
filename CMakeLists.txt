@@ -39,7 +39,7 @@ target_link_libraries(ApplicationTests Eigen3::Eigen sfml::sfml Catch2::Catch2Wi
 
 enable_testing()
 
-add_test(NAME Tests COMMAND ApplicationTests)
+add_test(NAME ApplicationTests COMMAND ApplicationTests)
 
 install(TARGETS Application RUNTIME)
 install(TARGETS ApplicationTests RUNTIME)
