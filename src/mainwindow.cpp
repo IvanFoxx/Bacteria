@@ -97,7 +97,7 @@ int MainWindow::MainLoop() {
 
     window_.display();
 
-    simulation_.Run(1.0 / 5);
+    simulation_.Run(1.0 / 2);
   }
 
   return 0;

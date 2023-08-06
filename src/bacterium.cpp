@@ -1,7 +1,7 @@
 #include "bacterium.hpp"
 
 Bacterium::Bacterium(const Field &field)
-    : field_(field), network_({3, 20, 20, 20, 2}) {}
+    : field_(field), network_({2, 12, 16, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -11,14 +11,14 @@ float Bacterium::GetEnergy() const { return energy_; }
 
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
-  energy_ = std::min<float>(energy_, 100);
+  energy_ = std::min<float>(energy_, 150);
 }
 
 void Bacterium::Play(float delta_time) {
-  Eigen::VectorXf input(3);
-  input(0) = energy_;
-  input(1) = x_;
-  input(2) = y_;
+  Eigen::VectorXf input(2);
+  // input(0) = energy_;
+  input(0) = x_ / field_.GetRange();
+  input(1) = y_ / field_.GetRange();
 
   auto output = network_.Calculate(input);
   auto speed_x = 100 * output(0) * delta_time;

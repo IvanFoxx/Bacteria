@@ -14,7 +14,9 @@ Network::Network(std::vector<int> layers_sizes) : layers_size_(layers_sizes) {
 Eigen::VectorXf Network::Calculate(Eigen::VectorXf input) const {
   assert(input.size() == layers_size_.front());
 
+  /*
   for (int i = 0; i < input.size(); i++) input(i) = std::tanh(input(i));
+*/
 
   Eigen::VectorXf output = input;
   for (size_t layer = 0; layer < layers_size_.size() - 1; layer++) {
