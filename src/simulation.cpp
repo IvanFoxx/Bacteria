@@ -77,7 +77,6 @@ void Simulation::InitNewGeneration() {
   field_.GetBacterium().clear();
   field_.GetEats().clear();
 
-  std::vector<std::shared_ptr<Bacterium>> best_bacterium(10);
   std::array<int, 100> eaten_count;
 
   /*for (size_t i = 90; i < 100; ++i)
@@ -95,6 +94,11 @@ void Simulation::InitNewGeneration() {
       count++;
       if (count == 9) break;
     }
+  }
+  for (size_t i = 0; i < 10; i++) {
+    auto b = Bacterium(GetField());
+    b.RandomGen();
+    PushBactery(b);
   }
 
   for (size_t i = 91; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
