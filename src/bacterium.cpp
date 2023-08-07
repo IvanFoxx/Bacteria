@@ -2,8 +2,7 @@
 
 #include "food.hpp"
 
-Bacterium::Bacterium(const Field &field)
-    : field_(field), network_({2, 10, 2}) {}
+Bacterium::Bacterium(const Field &field) : field_(field), network_({2, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -35,8 +34,8 @@ void Bacterium::Play(float delta_time) {
       }
     }
     float size = field_.GetRange();
-    input(0) = (cFood->GetX() - x_) / size;
-    input(1) = (cFood->GetY() - y_) / size;
+    input(0) = (cFood->GetX() - x_) / (mind + 0.001);
+    input(1) = (cFood->GetY() - y_) / (mind + 0.001);
   } else {
     input(0) = 0;
     input(1) = 0;
