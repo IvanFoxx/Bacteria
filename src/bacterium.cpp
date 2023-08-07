@@ -1,7 +1,9 @@
 #include "bacterium.hpp"
 
+#include "food.hpp"
+
 Bacterium::Bacterium(const Field &field)
-    : field_(field), network_({2, 12, 16, 2}) {}
+    : field_(field), network_({2, 10, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -15,10 +17,27 @@ void Bacterium::PushEnergy(float energy) {
 }
 
 void Bacterium::Play(float delta_time) {
-  Eigen::VectorXf input(2);
+  Eigen::VectorXf input(4);
   // input(0) = energy_;
-  input(0) = x_ / field_.GetRange();
-  input(1) = y_ / field_.GetRange();
+  // input(0) = x_ / field_.GetRange();
+  // input(1) = y_ / field_.GetRange();
+  float mind = field_.GetRange() * 2;
+  if (field_.GetEats().size() != 0) {
+    std::shared_ptr<Food> cFood;
+    for (auto food : field_.GetEats()) {
+      float d = sqrt(pow(x_ - food->GetX(), 2) + pow(y_ - food->GetY(), 2));
+      if (d < mind) {
+        mind = d;
+        cFood = food;
+      }
+    }
+    float size = field_.GetRange();
+    input(0) = (cFood->GetX() - x_) / size;
+    input(1) = (cFood->GetY() - y_) / size;
+  } else {
+    input(0) = 0;
+    input(1) = 0;
+  }
 
   auto output = network_.Calculate(input);
   auto speed_x = 100 * output(0) * delta_time;
