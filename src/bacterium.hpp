@@ -13,6 +13,7 @@ class Bacterium {
 
   float GetX() const;
   float GetY() const;
+  int GetEaten() const;
   float GetEnergy() const;
   void PushEnergy(float energy);
 
@@ -25,6 +26,7 @@ class Bacterium {
   const Field &field_;
   float x_, y_;
   float energy_ = 100;
+  int eaten_;
   Network network_;
 };
 

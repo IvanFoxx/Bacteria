@@ -9,11 +9,14 @@ float Bacterium::GetX() const { return x_; }
 
 float Bacterium::GetY() const { return y_; }
 
+int Bacterium::GetEaten() const { return eaten_; }
+
 float Bacterium::GetEnergy() const { return energy_; }
 
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
   energy_ = std::min<float>(energy_, 150);
+  eaten_++;
 }
 
 void Bacterium::Play(float delta_time) {

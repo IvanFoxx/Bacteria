@@ -1,5 +1,7 @@
 #include "simulation.hpp"
 
+#include <algorithm>
+#include <array>
 #include <iostream>
 
 const float radius = 30;
@@ -75,10 +77,27 @@ void Simulation::InitNewGeneration() {
   field_.GetBacterium().clear();
   field_.GetEats().clear();
 
-  for (size_t i = 90; i < 100; ++i)
-    for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);
+  std::vector<std::shared_ptr<Bacterium>> best_bacterium(10);
+  std::array<int, 100> eaten_count;
 
-  for (size_t i = 0; i < 10; i++) field_.GetBacterium()[i]->RandomGen();
+  /*for (size_t i = 90; i < 100; ++i)
+    for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);*/
+
+  for (size_t i = 0; i < 100; i++) {
+    eaten_count[i] = dead_[i]->GetEaten();
+  }
+  std::sort(eaten_count.begin(), eaten_count.end());
+  int top_eaten = eaten_count[91];
+  int count = 0;
+  for (size_t i = 0; i < 100; i++) {
+    if (dead_[i]->GetEaten() >= top_eaten) {
+      for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);
+      count++;
+      if (count == 9) break;
+    }
+  }
+
+  for (size_t i = 91; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
 
   for (size_t i = 0; i < 1000; i++) {
     auto f = Food(GetField());
