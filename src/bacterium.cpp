@@ -17,11 +17,11 @@ void Bacterium::PushEnergy(float energy) {
 }
 
 void Bacterium::Play(float delta_time) {
-  Eigen::VectorXf input(4);
+  Eigen::VectorXf input(2);
   // input(0) = energy_;
   // input(0) = x_ / field_.GetRange();
   // input(1) = y_ / field_.GetRange();
-  float mind = field_.GetRange() * 2;
+  float mind = std::numeric_limits<float>::max();
   if (field_.GetEats().size() != 0) {
     std::shared_ptr<Food> cFood;
     for (auto food : field_.GetEats()) {
