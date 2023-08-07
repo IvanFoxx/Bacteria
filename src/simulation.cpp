@@ -34,7 +34,7 @@ void Simulation::Run(float delta_time) {
       if (abs(b->GetX() - e->GetX()) < radius &&
           abs(b->GetY() - e->GetY()) < radius && e->GetAlive()) {
         e->SetAlive(false);
-        b->PushEnergy(100);
+        b->PushEnergy(50);
       }
     }
   }
@@ -86,7 +86,10 @@ void Simulation::InitNewGeneration() {
     PushFood(f);
   }
 
-  for (auto &elem : field_.GetBacterium()) elem->Mutation();
+  // for (auto &elem : field_.GetBacterium()) elem->Mutation();
+  auto b = field_.GetBacterium();
+  for (int i = 0; i < 9; i++)
+    for (int j = 0; j < 9; j++) b[i * 10 + j]->Mutation();
   dead_.clear();
 
   assert(dead_.size() == 0);
