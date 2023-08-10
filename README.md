@@ -1,4 +1,3 @@
-```markdown
 # Bacteria
 
 The Bacteria Simulation Project is a C++ program that utilizes genetic algorithms to simulate the behavior and evolution of bacteria. This project is built from scratch and aims to study the interactions and behaviors of simulated bacteria populations through the implementation of genetic algorithms.
@@ -27,7 +26,7 @@ To install the Bacteria Simulation Project, follow these steps:
 After building the project, you can run the bacteria simulation from the command line:
 
 ```bash
-./bacteria_simulation
+./Bacteria
 ```
 
 Follow the on-screen instructions to interact with the simulation. Observe the behavior of the simulated bacteria populations as they evolve over time using genetic algorithms.
