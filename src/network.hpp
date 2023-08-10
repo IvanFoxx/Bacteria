@@ -19,6 +19,7 @@ class Network {
   std::vector<int> layers_size_;
   std::vector<Eigen::MatrixXf> matrixes_;
   std::vector<Eigen::VectorXf> offsets_;
+  int mrate, mrate2;
 };
 
 #endif

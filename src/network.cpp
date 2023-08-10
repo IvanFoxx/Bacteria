@@ -2,13 +2,25 @@
 
 #include <cmath>
 
+#include "nparam.hpp"
+
 Network::Network(std::vector<int> layers_sizes) : layers_size_(layers_sizes) {
   matrixes_.resize(layers_size_.size());
   offsets_.resize(layers_size_.size());
+  int neurons = 0, connects = 0;
   for (size_t i = 0; i < layers_sizes.size() - 1; i++) {
+    neurons += layers_sizes[i];
+    connects += layers_sizes[i] * layers_sizes[i + 1];
     matrixes_[i] = Eigen::MatrixXf(layers_sizes[i + 1], layers_sizes[i]);
     offsets_[i] = Eigen::VectorXf(layers_sizes[i + 1]);
   }
+  neurons += layers_sizes[layers_sizes.size() - 1];
+
+  mrate = connects * mRate;
+  if (mrate < 1) mrate = 1;
+
+  mrate2 = neurons * mRate;
+  if (mrate2 < 1) mrate2 = 1;
 }
 
 Eigen::VectorXf Network::Calculate(Eigen::VectorXf input) const {
@@ -42,8 +54,8 @@ void Network::GenerateRandomly() {
 }
 
 void Network::GenerateMutation() {
-  for (size_t i = 0; i < 1; i++) {
-    auto delta = ((rand() % 2000) - 1000) / 5000.0;
+  for (size_t i = 0; i < mrate; i++) {
+    auto delta = mShift * (rand() % 2000 - 1000) / 1000;
     auto id = rand() % (matrixes_.size() - 1);
     auto y = rand() % matrixes_[id].rows();
     auto x = rand() % matrixes_[id].cols();
@@ -51,8 +63,8 @@ void Network::GenerateMutation() {
     matrixes_[id](y, x) += delta;
   }
 
-  for (size_t i = 0; i < 1; i++) {
-    auto delta = ((rand() % 2000) - 1000) / 5000.0;
+  for (size_t i = 0; i < mrate2; i++) {
+    auto delta = mShift * (rand() % 2000 - 1000) / 1000;
     auto id = rand() % (offsets_.size() - 1);
     auto y = rand() % matrixes_[id].rows();
     offsets_[id](y) += delta;
