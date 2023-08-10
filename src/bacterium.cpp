@@ -2,18 +2,20 @@
 
 #include "food.hpp"
 
-Bacterium::Bacterium(const Field &field)
-    : field_(field), network_({2, 10, 2}) {}
+Bacterium::Bacterium(const Field &field) : field_(field), network_({2, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
 float Bacterium::GetY() const { return y_; }
+
+int Bacterium::GetEaten() const { return eaten_; }
 
 float Bacterium::GetEnergy() const { return energy_; }
 
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
   energy_ = std::min<float>(energy_, 150);
+  eaten_++;
 }
 
 void Bacterium::Play(float delta_time) {
@@ -32,8 +34,8 @@ void Bacterium::Play(float delta_time) {
       }
     }
     float size = field_.GetRange();
-    input(0) = (cFood->GetX() - x_) / size;
-    input(1) = (cFood->GetY() - y_) / size;
+    input(0) = (cFood->GetX() - x_) / (mind + 0.001);
+    input(1) = (cFood->GetY() - y_) / (mind + 0.001);
   } else {
     input(0) = 0;
     input(1) = 0;
