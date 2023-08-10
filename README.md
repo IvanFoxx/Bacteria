@@ -6,7 +6,7 @@ The Bacteria Simulation Project is a C++ program that utilizes genetic algorithm
 - [Installation](#installation)
 - [Usage](#usage)
 - [Features](#features)
-//- [Screenshots/Demo](#screenshotsdemo)
+<!-- [Screenshots/Demo](#screenshotsdemo) -->
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -36,9 +36,9 @@ Follow the on-screen instructions to interact with the simulation. Observe the b
 - Written from scratch in C++.
 - Provides insights into how genetic algorithms can influence and model complex behaviors.
 
-//## Screenshots/Demo
-//![Screenshot 1](link_to_screenshot_1.png)
-//![Screenshot 2](link_to_screenshot_2.png)
+<!-- ## Screenshots/Demo -->
+<!--![Screenshot 1](link_to_screenshot_1.png)  -->
+<!--![Screenshot 2](link_to_screenshot_2.png) -->
 
 ## Contributing
 Contributions are welcome! To contribute to the project:
