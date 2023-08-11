@@ -33,10 +33,21 @@ void Simulation::Run(float delta_time) {
 
   for (auto b : field_.GetBacterium()) {
     for (auto e : field_.GetEats()) {
-      if (abs(b->GetX() - e->GetX()) < radius &&
+      if (b->IsHebr() && abs(b->GetX() - e->GetX()) < radius &&
           abs(b->GetY() - e->GetY()) < radius && e->GetAlive()) {
         e->SetAlive(false);
         b->PushEnergy(50);
+      }
+    }
+  }
+
+  for (auto b : field_.GetBacterium()) {
+    for (auto e : field_.GetBacterium()) {
+      if (b->GetFoodPos() > e->GetFoodPos() &&
+          abs(b->GetX() - e->GetX()) < radius &&
+          abs(b->GetY() - e->GetY()) < radius && e->GetEnergy() > 0) {
+        e->PushEnergy(-1000);
+        b->PushEnergy(100);
       }
     }
   }
@@ -45,25 +56,45 @@ void Simulation::Run(float delta_time) {
                             [](auto b) { return b->GetAlive() == false; });
   field_.GetEats().erase(ite, field_.GetEats().end());
 
+  for (auto b : field_.GetBacterium()) {
+    if (b->GetEnergy() >= 200) {
+      Bacterium b2 = *b;
+      b2.Mutation();
+      PushBactery(b2);
+      b->PushEnergy(-120);
+    }
+  }
+
   from_epoch_start += delta_time;
   from_last_food_spawn_ += delta_time;
 
-  // if (from_last_food_spawn_ > 2) {
-  //  auto f = Food(GetField());
-  //  f.PlaceRandomly();
-  //  PushFood(f);
-  // from_last_food_spawn_ = 0;
-  // }
-  if (field_.GetBacterium().empty()) InitNewGeneration();
+  if (from_last_food_spawn_ > -1) {
+    auto f = Food(GetField());
+    f.PlaceRandomly();
+    PushFood(f);
+    from_last_food_spawn_ = 0;
+  }
+
+  // if (field_.GetBacterium().empty()) InitNewGeneration();
 }
 
 void Simulation::InitRandomly() {
   for (size_t i = 0; i < 100; i++) {
-    auto b = Bacterium(GetField());
+    auto b = Bacterium(GetField(), {6, 4, 2}, 1, true, sf::Color::Green);
     b.RandomGen();
     PushBactery(b);
   }
   for (size_t i = 0; i < 100; i++) {
+    auto b = Bacterium(GetField(), {6, 6, 2}, 2, true, sf::Color::Blue);
+    b.RandomGen();
+    PushBactery(b);
+  }
+  for (size_t i = 0; i < 100; i++) {
+    auto b = Bacterium(GetField(), {6, 2, 2}, 3, false, sf::Color::Red);
+    b.RandomGen();
+    PushBactery(b);
+  }
+  for (size_t i = 0; i < 400; i++) {
     auto f = Food(GetField());
     f.PlaceRandomly();
     PushFood(f);
@@ -96,7 +127,7 @@ void Simulation::InitNewGeneration() {
     }
   }*/
   for (size_t i = 0; i < 10; i++) {
-    auto b = Bacterium(GetField());
+    auto b = Bacterium(GetField(), {}, 0, 0, sf::Color::Black);
     b.RandomGen();
     PushBactery(b);
   }
