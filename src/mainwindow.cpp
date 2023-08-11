@@ -44,7 +44,7 @@ void MainWindow::RenderFood() {
 
 void MainWindow::RenderBactery() {
   for (auto&& p : simulation_.GetField().GetBacterium()) {
-    float radius = transformer_.Scale(20 * p->GetEnergy() / 100);
+    float radius = transformer_.Scale(60 * p->GetEnergy() / 100);
     if (radius < 1) radius = 1;
     sf::CircleShape shape(radius);
     shape.setFillColor(p->GetColor());

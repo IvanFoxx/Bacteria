@@ -29,9 +29,13 @@ float Bacterium::GetEnergy() const { return energy_; }
 
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
-  // energy_ = std::min<float>(energy_, 150);
+  energy_ = std::min<float>(energy_, 210);
   eaten_++;
 }
+
+const Field &Bacterium::GetField() const { return field_; }
+
+Network Bacterium::GetNetwork() const { return network_; }
 
 Eigen::VectorXf Bacterium::GetInput() {
   Eigen::VectorXf input(6);

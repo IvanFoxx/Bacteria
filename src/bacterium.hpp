@@ -12,7 +12,7 @@ class Bacterium {
  public:
   Bacterium(const Field &field, std::vector<int> network, int fpos, bool hebr,
             sf::Color color);
-  Bacterium(const Bacterium &other);
+  // Bacterium(const Bacterium &other);
 
   float GetX() const;
   float GetY() const;
@@ -22,6 +22,9 @@ class Bacterium {
   bool IsHebr() const;
   float GetEnergy() const;
   void PushEnergy(float energy);
+
+  const Field &GetField() const;
+  Network GetNetwork() const;
 
   Eigen::VectorXf virtual GetInput();
   void Play(float delta_time);

@@ -60,18 +60,21 @@ void Simulation::Run(float delta_time) {
     if (b->GetEnergy() >= 200) {
       Bacterium b2 = *b;
       b2.Mutation();
-      PushBactery(b2);
-      b->PushEnergy(-120);
+      field_.GetBacterium().push_back(
+          std::shared_ptr<Bacterium>(new Bacterium(b2)));
+      b->PushEnergy(-100);
     }
   }
 
   from_epoch_start += delta_time;
   from_last_food_spawn_ += delta_time;
 
-  if (from_last_food_spawn_ > -1) {
-    auto f = Food(GetField());
-    f.PlaceRandomly();
-    PushFood(f);
+  if (from_last_food_spawn_ > 1) {
+    for (int i = 0; i < 4; i++) {
+      auto f = Food(GetField());
+      f.PlaceRandomly();
+      PushFood(f);
+    }
     from_last_food_spawn_ = 0;
   }
 
@@ -79,22 +82,22 @@ void Simulation::Run(float delta_time) {
 }
 
 void Simulation::InitRandomly() {
-  for (size_t i = 0; i < 100; i++) {
+  for (size_t i = 0; i < 80; i++) {
     auto b = Bacterium(GetField(), {6, 4, 2}, 1, true, sf::Color::Green);
     b.RandomGen();
     PushBactery(b);
   }
-  for (size_t i = 0; i < 100; i++) {
+  for (size_t i = 0; i < 80; i++) {
     auto b = Bacterium(GetField(), {6, 6, 2}, 2, true, sf::Color::Blue);
     b.RandomGen();
     PushBactery(b);
   }
-  for (size_t i = 0; i < 100; i++) {
+  for (size_t i = 0; i < 80; i++) {
     auto b = Bacterium(GetField(), {6, 2, 2}, 3, false, sf::Color::Red);
     b.RandomGen();
     PushBactery(b);
   }
-  for (size_t i = 0; i < 400; i++) {
+  for (size_t i = 0; i < 200; i++) {
     auto f = Food(GetField());
     f.PlaceRandomly();
     PushFood(f);
