@@ -1,25 +1,26 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
+#include <Eigen/Dense>
 #include <vector>
 
-#include "lmath.hpp"
-
-class Network {
+/**
+ * @brief The Network class describes network
+ */
+class Network final {
  public:
   Network(std::vector<int> layers_sizes);
   Network(const Network& other) = default;
 
-  Eigen::VectorXf Calculate(Eigen::VectorXf input) const;
+  Eigen::VectorXf Calculate(const Eigen::VectorXf& input) const;
 
   void GenerateRandomly();
-  void GenerateMutation();
+  void MakeMutation();
+  void MakeCrossing(const Network& net);
 
  private:
   std::vector<int> layers_size_;
   std::vector<Eigen::MatrixXf> matrixes_;
-  std::vector<Eigen::VectorXf> offsets_;
-  int mrate, mrate2;
 };
 
 #endif

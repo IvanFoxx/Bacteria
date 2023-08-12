@@ -30,6 +30,7 @@ class MainWindow {
   size_t width_, height_;
 
   bool move_mode_ = false;
+  bool fast_mode_ = false;
 
   int last_x_ = 0;
   int last_y_ = 0;

@@ -4,69 +4,65 @@
 
 #include "nparam.hpp"
 
+///< generates number in -1 -- 1 range
+float GenerateRandom() { return ((float)rand() / RAND_MAX) * 2 - 1; }
+
 Network::Network(std::vector<int> layers_sizes) : layers_size_(layers_sizes) {
-  matrixes_.resize(layers_size_.size());
-  offsets_.resize(layers_size_.size());
-  int neurons = 0, connects = 0;
-  for (size_t i = 0; i < layers_sizes.size() - 1; i++) {
-    neurons += layers_sizes[i];
-    connects += layers_sizes[i] * layers_sizes[i + 1];
-    matrixes_[i] = Eigen::MatrixXf(layers_sizes[i + 1], layers_sizes[i]);
-    offsets_[i] = Eigen::VectorXf(layers_sizes[i + 1]);
-  }
-  neurons += layers_sizes[layers_sizes.size() - 1];
+  matrixes_.resize(layers_size_.size() - 1);
 
-  mrate = connects * mRate;
-  if (mrate < 1) mrate = 1;
-
-  mrate2 = neurons * mRate;
-  if (mrate2 < 1) mrate2 = 1;
+  for (size_t i = 0; i < matrixes_.size(); i++)
+    matrixes_[i] = Eigen::MatrixXf(layers_sizes[i + 1], layers_sizes[i] + 1);
 }
 
-Eigen::VectorXf Network::Calculate(Eigen::VectorXf input) const {
-  assert(input.size() == layers_size_.front());
-
-  /*
-  for (int i = 0; i < input.size(); i++) input(i) = std::tanh(input(i));
-*/
-
+Eigen::VectorXf Network::Calculate(const Eigen::VectorXf &input) const {
   Eigen::VectorXf output = input;
-  for (size_t layer = 0; layer < layers_size_.size() - 1; layer++) {
-    output = matrixes_[layer] * output;
-    output += offsets_[layer];
 
-    for (int i = 0; i < output.size(); i++) {
-      output(i) = std::tanh(output(i));
-    }
+  for (const auto &matrix : matrixes_) {
+    Eigen::VectorXf with_1_neuro(output.size() + 1);
+    with_1_neuro << output, 1;
+    output = matrix * with_1_neuro;
+
+    for (int i = 0; i < output.size(); i++) output(i) = std::tanh(output(i));
   }
   return output;
 }
 
 void Network::GenerateRandomly() {
-  for (size_t i = 0; i < matrixes_.size() - 1; i++)
-    for (int y = 0; y < matrixes_[i].rows(); y++)
-      for (int x = 0; x < matrixes_[i].cols(); x++)
-        matrixes_[i](y, x) = ((rand() % 2000) - 1000) / 1000.0;
-
-  for (size_t i = 0; i < offsets_.size() - 1; i++)
-    for (int y = 0; y < offsets_[i].size(); y++)
-      offsets_[i](y) = ((rand() % 2000) - 1000) / 1000.0;
+  for (auto &layer : matrixes_)
+    layer = Eigen::MatrixXf::Random(layer.rows(), layer.cols());
 }
 
-void Network::GenerateMutation() {
-  for (size_t i = 0; i < mrate; i++) {
-    auto delta = mShift * (rand() % 2000 - 1000) / 1000;
-    auto id = rand() % (matrixes_.size() - 1);
-    auto y = rand() % matrixes_[id].rows();
-    auto x = rand() % matrixes_[id].cols();
+void Network::MakeMutation() {
+  int size = 0;
 
-    matrixes_[id](y, x) += delta;
+  for (auto &matrix : matrixes_) size += matrix.size();
+
+  int mutation_count = std::max<int>(size * MutationSetting::Rate, 1);
+
+  for (int i = 0; i < mutation_count; i++) {
+    auto point = rand() % size;
+
+    for (auto &matrix : matrixes_) {
+      if (point >= matrix.size())
+        point -= matrix.size();
+      else {
+        auto x = point % matrix.rows();
+        auto y = point / matrix.rows();
+
+        auto delta = MutationSetting::Delta * GenerateRandom();
+        matrix(x, y) = delta;
+        break;
+      }
+    }
   }
+}
 
-  for (size_t i = 0; i < mrate2; i++) {
-    auto delta = mShift * (rand() % 2000 - 1000) / 1000;
-    auto id = rand() % (offsets_.size() - 1);
-    auto y = rand() % matrixes_[id].rows();
-    offsets_[id](y) += delta;
+void Network::MakeCrossing(const Network &net) {
+  for (size_t i = 0; i < matrixes_.size(); i++) {
+    for (int x = 0; x < matrixes_[i].rows(); x++)
+      for (int y = 0; y < matrixes_[i].cols(); y++) {
+        matrixes_[i](x, y) =
+            rand() % 2 ? matrixes_[i](x, y) : net.matrixes_[i](x, y);
+      }
   }
 }

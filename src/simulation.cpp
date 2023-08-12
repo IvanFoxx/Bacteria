@@ -4,6 +4,8 @@
 #include <array>
 #include <iostream>
 
+#include "selection.hpp"
+
 const float radius = 30;
 
 Simulation::Simulation() {}
@@ -37,6 +39,7 @@ void Simulation::Run(float delta_time) {
           abs(b->GetY() - e->GetY()) < radius && e->GetAlive()) {
         e->SetAlive(false);
         b->PushEnergy(50);
+        b->Eat();
       }
     }
   }
@@ -71,49 +74,18 @@ void Simulation::InitRandomly() {
 }
 
 void Simulation::InitNewGeneration() {
-  std::cout << from_epoch_start << std::endl;
-  from_epoch_start = 0;
-
   field_.GetBacterium().clear();
   field_.GetEats().clear();
 
-  std::array<int, 100> eaten_count;
-
-  for (size_t i = 91; i < 100; ++i)
-    for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);
-
-  /*for (size_t i = 0; i < 100; i++) {
-    eaten_count[i] = dead_[i]->GetEaten();
-  }
-  std::sort(eaten_count.begin(), eaten_count.end());
-  int top_eaten = eaten_count[91];
-  int count = 0;
-  for (size_t i = 0; i < 100; i++) {
-    if (dead_[i]->GetEaten() >= top_eaten) {
-      for (size_t j = 0; j < 10; ++j) PushBactery(*dead_[i]);
-      count++;
-      if (count == 9) break;
-    }
-  }*/
-  for (size_t i = 0; i < 10; i++) {
-    auto b = Bacterium(GetField());
-    b.RandomGen();
-    PushBactery(b);
-  }
-
-  for (size_t i = 91; i < 100; i++) field_.GetBacterium()[i]->RandomGen();
+  field_.GetBacterium() = Selection(dead_);
+  for (auto &b : field_.GetBacterium()) b->PlaceRandomly();
+  dead_.clear();
 
   for (size_t i = 0; i < 1000; i++) {
     auto f = Food(GetField());
     f.PlaceRandomly();
     PushFood(f);
   }
-
-  // for (auto &elem : field_.GetBacterium()) elem->Mutation();
-  auto b = field_.GetBacterium();
-  for (int i = 0; i < 9; i++)
-    for (int j = 0; j < 9; j++) b[i * 10 + j]->Mutation();
-  dead_.clear();
 
   assert(dead_.size() == 0);
   assert(field_.bacteria_.size() == 100);
