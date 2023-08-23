@@ -20,7 +20,7 @@ class Field {
   int GetRange() const;
 
  private:
-  int map_range_ = 1000;
+  int map_range_ = 4000;
   std::vector<std::shared_ptr<Food>> foods_;
   std::vector<std::shared_ptr<Bacterium>> bacteria_;
 };
