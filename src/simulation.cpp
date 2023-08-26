@@ -4,24 +4,15 @@
 #include <array>
 #include <iostream>
 
-#include "selection.hpp"
-
-const float radius = 30;
-
 Simulation::Simulation() {}
 
-/*void Simulation::PushBactery(Bacterium b) {
-  b.PlaceRandomly();
-  field_.GetBacterium().push_back(std::shared_ptr<Bacterium>(new Bacterium(b)));
-}
+void Simulation::SetCore(std::shared_ptr<Core> core) { core_ = core; }
 
-void Simulation::PushFood(const Food &bacterium) {
-  std::shared_ptr<Food> b(new Food(bacterium));
-  field_.GetEats().push_back(b);
-}*/
+void Simulation::ReStart() { field_.GetObjects() = core_->FirstGeneration(); }
 
-/*void Simulation::Run(float delta_time) {
-  for (auto &bactery : field_.GetBacterium()) bactery->Play(delta_time);
+void Simulation::Start(float delta_time) {
+  /*
+  // for (auto &bactery : field_.GetObjects()) bactery->Play(delta_time);
   auto it =
       std::partition(field_.GetBacterium().begin(), field_.GetBacterium().end(),
                      [](const auto &b) { return b->GetEnergy() > 0; });
@@ -48,9 +39,6 @@ void Simulation::PushFood(const Food &bacterium) {
                             [](auto b) { return b->GetAlive() == false; });
   field_.GetEats().erase(ite, field_.GetEats().end());
 
-  from_epoch_start += delta_time;
-  from_last_food_spawn_ += delta_time;
-
   // if (from_last_food_spawn_ > 2) {
   //  auto f = Food(GetField());
   //  f.PlaceRandomly();
@@ -58,37 +46,13 @@ void Simulation::PushFood(const Food &bacterium) {
   // from_last_food_spawn_ = 0;
   // }
   if (field_.GetBacterium().empty()) InitNewGeneration();
-}*/
-
-/*void Simulation::InitRandomly() {
-  for (size_t i = 0; i < 100; i++) {
-    auto b = Bacterium(GetField());
-    b.RandomGen();
-    PushBactery(b);
-  }
-  for (size_t i = 0; i < 100; i++) {
-    auto f = Food(GetField());
-    f.PlaceRandomly();
-    PushFood(f);
-  }
-}*/
-
-/*void Simulation::InitNewGeneration() {
-  field_.GetBacterium().clear();
-  field_.GetEats().clear();
-
-  field_.GetBacterium() = Selection(dead_);
-  for (auto &b : field_.GetBacterium()) b->PlaceRandomly();
-  dead_.clear();
-
-  for (size_t i = 0; i < 1000; i++) {
-    auto f = Food(GetField());
-    f.PlaceRandomly();
-    PushFood(f);
-  }
-
-  assert(dead_.size() == 0);
-  assert(field_.bacteria_.size() == 100);
-}*/
+*/
+}
 
 const Field &Simulation::GetField() const { return field_; }
+
+void Simulation::SetField(const Field &field) { field_ = field; }
+
+void Simulation::Stop() {}
+
+int Simulation::GetGeneration() const { return generation_; }

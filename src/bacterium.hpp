@@ -7,7 +7,7 @@
 #include "network.hpp"
 #include "object.hpp"
 
-class Bacterium : Object {
+class Bacterium : public Object {
  public:
   Bacterium(const Field &field, const Network &net);
 

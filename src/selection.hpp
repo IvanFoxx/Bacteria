@@ -3,6 +3,7 @@
 #include <bacterium.hpp>
 #include <vector>
 
+/*
 std::vector<std::shared_ptr<Bacterium>> Selection(
     const std::vector<std::shared_ptr<Bacterium>> &from);
 
@@ -13,5 +14,6 @@ struct SelectioSettings {
   constexpr const static float Mutation = 0.5;
   constexpr const static float Crossing = 0.4;
 };
+*/
 
 #endif

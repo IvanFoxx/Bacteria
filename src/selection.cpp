@@ -1,14 +1,11 @@
 #include "selection.hpp"
 
-#include <iostream>
-
+/*
 std::vector<std::shared_ptr<Bacterium>> Selection(
     const std::vector<std::shared_ptr<Bacterium>> &from) {
   std::vector<std::shared_ptr<Bacterium>> from_copy = from;
   std::sort(from_copy.rbegin(), from_copy.rend(),
             [](auto b1, auto b2) { return b1->GetEaten() < b2->GetEaten(); });
-
-  std::cout << from_copy.front()->GetEaten() << std::endl;
 
   int sample_count = SelectioSettings::Generation * SelectioSettings::Sample;
   std::vector<Network> sample;
@@ -59,3 +56,4 @@ std::vector<std::shared_ptr<Bacterium>> Selection(
 
   return result;
 }
+*/

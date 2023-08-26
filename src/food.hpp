@@ -4,7 +4,7 @@
 #include "field.hpp"
 #include "object.hpp"
 
-class Food : Object {
+class Food : public Object {
  public:
   Food(const Field &field);
 };

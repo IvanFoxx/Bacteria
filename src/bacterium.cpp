@@ -1,33 +1,14 @@
 #include "bacterium.hpp"
 
-#include "food.hpp"
-
 Bacterium::Bacterium(const Field &field, const Network &net)
-    : field_(field), network_(net) {}
-
-Bacterium::Bacterium(const Field &field)
-    : field_(field), network_({2, 8, 8, 2}) {}
-
-float Bacterium::GetX() const { return x_; }
-
-float Bacterium::GetY() const { return y_; }
-
-int Bacterium::GetEaten() const { return eaten_; }
+    : Object(field, true, true), network_(net) {}
 
 float Bacterium::GetEnergy() const { return energy_; }
 
-void Bacterium::PushEnergy(float energy) {
-  energy_ += energy;
-  energy_ = std::min<float>(energy_, 150);
-}
-
-void Bacterium::Eat() { eaten_++; }
-
 Network Bacterium::GetNetwork() { return network_; }
 
-const Field &Bacterium::GetField() const { return field_; }
-
 void Bacterium::Play(float delta_time) {
+  /*
   Eigen::VectorXf input(2);
   // input(0) = energy_;
   // input(0) = x_ / field_.GetRange();
@@ -66,20 +47,5 @@ void Bacterium::Play(float delta_time) {
   energy_ -= 5 * delta_time;
   // energy_ = std::min<float>(energy_, 1000);
   energy_ = std::max<float>(energy_, 0);
-}
-
-void Bacterium::PlaceRandomly() {
-  x_ = rand() % (2 * field_.GetRange()) - field_.GetRange();
-  y_ = rand() % (2 * field_.GetRange()) - field_.GetRange();
-  x_ /= 1.1;
-  y_ /= 1.1;
-  energy_ = 100;
-}
-
-void Bacterium::Mutation() { network_.MakeMutation(); }
-
-void Bacterium::RandomGen() { network_.GenerateRandomly(); }
-
-void Bacterium::Crossing(const Bacterium &b) {
-  network_.MakeCrossing(b.network_);
+*/
 }

@@ -5,7 +5,7 @@
 
 class Object {
  public:
-  Object(Field &field, bool primary, bool collider);
+  Object(const Field &field, bool primary, bool collider);
   virtual ~Object() = 0;
 
   bool GetAlive() const;
@@ -39,7 +39,7 @@ class Object {
   float radius_;
   float x_, y_;
 
-  Field &field_;
+  const Field &field_;
 };
 
 #endif

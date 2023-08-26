@@ -1,6 +1,6 @@
 #include "object.hpp"
 
-Object::Object(Field &field, bool primary, bool collider)
+Object::Object(const Field &field, bool primary, bool collider)
     : primary_(primary), collider_(collider), field_(field) {}
 
 bool Object::GetAlive() const { return alive_; }
