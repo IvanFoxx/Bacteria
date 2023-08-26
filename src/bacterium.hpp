@@ -4,35 +4,22 @@
 #include <memory>
 #include <vector>
 
-#include "field.hpp"
 #include "network.hpp"
+#include "object.hpp"
 
-class Bacterium {
+class Bacterium : Object {
  public:
   Bacterium(const Field &field, const Network &net);
-  Bacterium(const Field &field);
 
-  float GetX() const;
-  float GetY() const;
-  int GetEaten() const;
   float GetEnergy() const;
-  void PushEnergy(float energy);
-  void Eat();
 
   Network GetNetwork();
-  const Field &GetField() const;
+  void SetNetwork(const Network &);
 
   void Play(float delta_time);
-  void PlaceRandomly();
-  void Mutation();
-  void RandomGen();
-  void Crossing(const Bacterium &b);
 
  private:
-  const Field &field_;
-  float x_, y_;
   float energy_ = 100;
-  int eaten_ = 0;
   Network network_;
 };
 
