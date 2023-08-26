@@ -34,6 +34,9 @@ class MainWindow {
 
   int last_x_ = 0;
   int last_y_ = 0;
+
+  float delta_time_ = 0;
+  float time_speed_ = 0;
 };
 
 #endif

@@ -1,5 +1,7 @@
 #include "mainwindow.hpp"
 
+#include <chrono>
+
 void MainWindow::EventHandle(sf::Event& e) {
   if (e.type == sf::Event::MouseWheelScrolled) {
     transformer_.ScaleCamera(e.mouseWheelScroll.delta);
@@ -24,7 +26,7 @@ void MainWindow::EventHandle(sf::Event& e) {
   }
 }
 
-void MainWindow::RenderFood() {
+/*void MainWindow::RenderFood() {
   for (auto&& p : simulation_.GetField().GetEats()) {
     float radius = transformer_.Scale(10);
     sf::CircleShape shape(radius);
@@ -56,7 +58,7 @@ void MainWindow::RenderBactery() {
     shape.setPosition(after);
     window_.draw(shape);
   }
-}
+}*/
 
 MainWindow::MainWindow(size_t width, size_t height)
     : transformer_(width, height),
@@ -68,6 +70,8 @@ MainWindow::MainWindow(size_t width, size_t height)
 }
 
 int MainWindow::MainLoop() {
+  std::chrono::steady_clock::time_point begin =
+      std::chrono::steady_clock::now();
   sf::CircleShape shape(100.f);
   shape.setFillColor(sf::Color::Green);
   float range = simulation_.GetField().GetRange();
@@ -86,6 +90,13 @@ int MainWindow::MainLoop() {
         fast_mode_ = !fast_mode_;
         window_.setFramerateLimit(fast_mode_ ? 2000 : 60);
       }
+      if (event.type == sf::Event::KeyReleased) {
+        if (event.key.code == sf::Keyboard::Add) {
+          time_speed_ += 0.2;
+        } else if (event.key.code == sf::Keyboard::Subtract) {
+          if (time_speed_ > 0.2) time_speed_ -= 0.2;
+        }
+      }
       if (event.type == sf::Event::Closed) window_.close();
     }
 
@@ -102,7 +113,13 @@ int MainWindow::MainLoop() {
 
     window_.display();
 
-    simulation_.Run(1.0 / 2);
+    simulation_.Run(delta_time_ / time_speed_);
+    std::chrono::steady_clock::time_point end =
+        std::chrono::steady_clock::now();
+    delta_time_ =
+        (std::chrono::duration_cast<std::chrono::microseconds>(end - begin)
+             .count()) /
+        1000000.0;
   }
 
   return 0;

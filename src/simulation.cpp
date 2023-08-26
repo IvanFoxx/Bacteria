@@ -10,7 +10,7 @@ const float radius = 30;
 
 Simulation::Simulation() {}
 
-void Simulation::PushBactery(Bacterium b) {
+/*void Simulation::PushBactery(Bacterium b) {
   b.PlaceRandomly();
   field_.GetBacterium().push_back(std::shared_ptr<Bacterium>(new Bacterium(b)));
 }
@@ -18,9 +18,9 @@ void Simulation::PushBactery(Bacterium b) {
 void Simulation::PushFood(const Food &bacterium) {
   std::shared_ptr<Food> b(new Food(bacterium));
   field_.GetEats().push_back(b);
-}
+}*/
 
-void Simulation::Run(float delta_time) {
+/*void Simulation::Run(float delta_time) {
   for (auto &bactery : field_.GetBacterium()) bactery->Play(delta_time);
   auto it =
       std::partition(field_.GetBacterium().begin(), field_.GetBacterium().end(),
@@ -58,9 +58,9 @@ void Simulation::Run(float delta_time) {
   // from_last_food_spawn_ = 0;
   // }
   if (field_.GetBacterium().empty()) InitNewGeneration();
-}
+}*/
 
-void Simulation::InitRandomly() {
+/*void Simulation::InitRandomly() {
   for (size_t i = 0; i < 100; i++) {
     auto b = Bacterium(GetField());
     b.RandomGen();
@@ -71,9 +71,9 @@ void Simulation::InitRandomly() {
     f.PlaceRandomly();
     PushFood(f);
   }
-}
+}*/
 
-void Simulation::InitNewGeneration() {
+/*void Simulation::InitNewGeneration() {
   field_.GetBacterium().clear();
   field_.GetEats().clear();
 
@@ -89,6 +89,6 @@ void Simulation::InitNewGeneration() {
 
   assert(dead_.size() == 0);
   assert(field_.bacteria_.size() == 100);
-}
+}*/
 
 const Field &Simulation::GetField() const { return field_; }
