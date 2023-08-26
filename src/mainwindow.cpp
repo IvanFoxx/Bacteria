@@ -81,6 +81,11 @@ int MainWindow::MainLoop() {
     sf::Event event;
     while (window_.pollEvent(event)) {
       EventHandle(event);
+      if (event.type == sf::Event::KeyReleased &&
+          event.key.code == sf::Keyboard::Space) {
+        fast_mode_ = !fast_mode_;
+        window_.setFramerateLimit(fast_mode_ ? 2000 : 60);
+      }
       if (event.type == sf::Event::Closed) window_.close();
     }
 

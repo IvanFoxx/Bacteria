@@ -2,7 +2,11 @@
 
 #include "food.hpp"
 
-Bacterium::Bacterium(const Field &field) : field_(field), network_({2, 2}) {}
+Bacterium::Bacterium(const Field &field, const Network &net)
+    : field_(field), network_(net) {}
+
+Bacterium::Bacterium(const Field &field)
+    : field_(field), network_({2, 8, 8, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -15,8 +19,13 @@ float Bacterium::GetEnergy() const { return energy_; }
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
   energy_ = std::min<float>(energy_, 150);
-  eaten_++;
 }
+
+void Bacterium::Eat() { eaten_++; }
+
+Network Bacterium::GetNetwork() { return network_; }
+
+const Field &Bacterium::GetField() const { return field_; }
 
 void Bacterium::Play(float delta_time) {
   Eigen::VectorXf input(2);
@@ -67,6 +76,10 @@ void Bacterium::PlaceRandomly() {
   energy_ = 100;
 }
 
-void Bacterium::Mutation() { network_.GenerateMutation(); }
+void Bacterium::Mutation() { network_.MakeMutation(); }
 
 void Bacterium::RandomGen() { network_.GenerateRandomly(); }
+
+void Bacterium::Crossing(const Bacterium &b) {
+  network_.MakeCrossing(b.network_);
+}
