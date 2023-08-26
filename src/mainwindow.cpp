@@ -26,39 +26,21 @@ void MainWindow::EventHandle(sf::Event& e) {
   }
 }
 
-/*void MainWindow::RenderFood() {
-  for (auto&& p : simulation_.GetField().GetEats()) {
-    float radius = transformer_.Scale(10);
+void MainWindow::Render(std::vector<std::shared_ptr<Object>> objects) {
+  for (auto&& object : objects) {
+    float radius = transformer_.Scale(object->GetRadius());
     sf::CircleShape shape(radius);
-    shape.setFillColor(sf::Color::Yellow);
+    shape.setFillColor(sf::Color::Green);
     shape.setOrigin(radius, radius);
-    // shape.setOutlineColor(sf::Color::White);
-    // shape.setOutlineThickness(transformer_.Scale(2));
-    sf::Vector2f after(transformer_.ScaleW(p->GetX()),
-                       transformer_.ScaleH(p->GetY()));
-    if (after.x < 0.0 || after.x > width_ || after.y < 0.0 || after.y > height_)
+    sf::Vector2f after(transformer_.ScaleW(object->GetX()),
+                       transformer_.ScaleH(object->GetY()));
+    if (after.x + radius < 0.0 || after.x - radius > width_ ||
+        after.y + radius < 0.0 || after.y - radius > height_)
       continue;
     shape.setPosition(after);
     window_.draw(shape);
   }
 }
-
-void MainWindow::RenderBactery() {
-  for (auto&& p : simulation_.GetField().GetBacterium()) {
-    float radius = transformer_.Scale(20 * p->GetEnergy() / 100);
-    sf::CircleShape shape(radius);
-    shape.setFillColor(sf::Color::Green);
-    // shape.setOutlineColor(sf::Color::White);
-    // shape.setOutlineThickness(transformer_.Scale(2));
-    shape.setOrigin(radius, radius);
-    sf::Vector2f after(transformer_.ScaleW(p->GetX()),
-                       transformer_.ScaleH(p->GetY()));
-    if (after.x < 0.0 || after.x > width_ || after.y < 0.0 || after.y > height_)
-      continue;
-    shape.setPosition(after);
-    window_.draw(shape);
-  }
-}*/
 
 MainWindow::MainWindow(size_t width, size_t height)
     : transformer_(width, height),

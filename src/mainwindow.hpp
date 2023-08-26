@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 
+#include "object.hpp"
 #include "ptransform.hpp"
 #include "simulation.hpp"
 
@@ -20,8 +21,7 @@ class MainWindow {
                 sf::Vector2f position = {0, 0},
                 sf::Vector2f relative_origin = {0, 0});
 
-  void RenderFood();
-  void RenderBactery();
+  void Render(std::vector<std::shared_ptr<Object>> objects);
 
  private:
   Simulation simulation_;
