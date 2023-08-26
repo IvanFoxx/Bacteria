@@ -22,27 +22,28 @@ set(CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR};${CMAKE_PREFIX_PATH}")
 set(CMAKE_MODULE_PATH "${CMAKE_BINARY_DIR};${CMAKE_MODULE_PATH}")
 
 find_package(SFML 2.5.1 COMPONENTS graphics REQUIRED)
-find_package(Catch2 3 REQUIRED)
 find_package(Eigen3 REQUIRED)
-
-list(REMOVE_ITEM testfiles ${CMAKE_SOURCE_DIR}/src/main.cpp)
-
-message(${testfiles})
 
 add_executable(Application ${files})
 target_include_directories(Application PRIVATE src)
 target_link_libraries(Application sfml::sfml Eigen3::Eigen)
 
+if(ENABLE_TESTING)
+
+enable_testing()
+find_package(Catch2 3 REQUIRED)
+
+list(REMOVE_ITEM testfiles ${CMAKE_SOURCE_DIR}/src/main.cpp)
+
 add_executable(ApplicationTests ${testfiles} ${tests})
 target_include_directories(ApplicationTests PRIVATE src)
 target_link_libraries(ApplicationTests Eigen3::Eigen sfml::sfml Catch2::Catch2WithMain)
 
-enable_testing()
-
 add_test(NAME ApplicationTests COMMAND ApplicationTests)
+install(TARGETS ApplicationTests RUNTIME)
+endif()
 
 install(TARGETS Application RUNTIME)
-install(TARGETS ApplicationTests RUNTIME)
 
 
 
