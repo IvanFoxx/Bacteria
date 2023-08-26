@@ -70,5 +70,3 @@ void Network::GenerateMutation() {
     offsets_[id](y) += delta;
   }
 }
-
-std::vector<int> Network::GetLayerSizes() const { return layers_size_; }

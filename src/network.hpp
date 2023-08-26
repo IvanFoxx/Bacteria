@@ -15,8 +15,6 @@ class Network {
   void GenerateRandomly();
   void GenerateMutation();
 
-  std::vector<int> GetLayerSizes() const;
-
  private:
   std::vector<int> layers_size_;
   std::vector<Eigen::MatrixXf> matrixes_;

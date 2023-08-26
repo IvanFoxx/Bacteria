@@ -2,16 +2,7 @@
 
 #include "food.hpp"
 
-// Bacterium::Bacterium(const Field &field, std::vector<int> network)
-//     : field_(field), network_(network) {}
-
-Bacterium::Bacterium(const Field &field, std::vector<int> network, int fpos,
-                     bool hebr, sf::Color color)
-    : field_(field), network_(network) {
-  fpos_ = fpos;
-  hebr_ = hebr;
-  color_ = color;
-}
+Bacterium::Bacterium(const Field &field) : field_(field), network_({2, 2}) {}
 
 float Bacterium::GetX() const { return x_; }
 
@@ -19,26 +10,16 @@ float Bacterium::GetY() const { return y_; }
 
 int Bacterium::GetEaten() const { return eaten_; }
 
-sf::Color Bacterium::GetColor() const { return color_; }
-
-int Bacterium::GetFoodPos() const { return fpos_; }
-
-bool Bacterium::IsHebr() const { return hebr_; }
-
 float Bacterium::GetEnergy() const { return energy_; }
 
 void Bacterium::PushEnergy(float energy) {
   energy_ += energy;
-  energy_ = std::min<float>(energy_, 210);
+  energy_ = std::min<float>(energy_, 150);
   eaten_++;
 }
 
-const Field &Bacterium::GetField() const { return field_; }
-
-Network Bacterium::GetNetwork() const { return network_; }
-
-Eigen::VectorXf Bacterium::GetInput() {
-  Eigen::VectorXf input(6);
+void Bacterium::Play(float delta_time) {
+  Eigen::VectorXf input(2);
   // input(0) = energy_;
   // input(0) = x_ / field_.GetRange();
   // input(1) = y_ / field_.GetRange();
@@ -60,50 +41,6 @@ Eigen::VectorXf Bacterium::GetInput() {
     input(1) = 0;
   }
 
-  mind = std::numeric_limits<float>::max();
-  input(2) = 0;
-  input(3) = 0;
-  if (field_.GetBacterium().size() != 0) {
-    std::shared_ptr<Bacterium> cBFood;
-    for (auto bfood : field_.GetBacterium()) {
-      if (bfood->GetFoodPos() < fpos_) {
-        float d = sqrt(pow(x_ - bfood->GetX(), 2) + pow(y_ - bfood->GetY(), 2));
-        if (d < mind) {
-          mind = d;
-          cBFood = bfood;
-        }
-      }
-    }
-    if (cBFood) {
-      input(2) = (cBFood->GetX() - x_) / (mind + 0.001);
-      input(3) = (cBFood->GetY() - y_) / (mind + 0.001);
-    }
-  }
-
-  mind = std::numeric_limits<float>::max();
-  input(4) = 0;
-  input(5) = 0;
-  if (field_.GetBacterium().size() != 0) {
-    std::shared_ptr<Bacterium> cEnemy;
-    for (auto enemy : field_.GetBacterium()) {
-      if (enemy->GetFoodPos() > fpos_) {
-        float d = sqrt(pow(x_ - enemy->GetX(), 2) + pow(y_ - enemy->GetY(), 2));
-        if (d < mind) {
-          mind = d;
-          cEnemy = enemy;
-        }
-      }
-    }
-    if (cEnemy) {
-      input(4) = (cEnemy->GetX() - x_) / (mind + 0.001);
-      input(5) = (cEnemy->GetY() - y_) / (mind + 0.001);
-    }
-  }
-  return input;
-}
-
-void Bacterium::Play(float delta_time) {
-  Eigen::VectorXf input = GetInput();
   auto output = network_.Calculate(input);
   auto speed_x = 100 * output(0) * delta_time;
   auto speed_y = 100 * output(1) * delta_time;
@@ -133,5 +70,3 @@ void Bacterium::PlaceRandomly() {
 void Bacterium::Mutation() { network_.GenerateMutation(); }
 
 void Bacterium::RandomGen() { network_.GenerateRandomly(); }
-
-void Bacterium::Double() {}

@@ -27,7 +27,6 @@ void MainWindow::EventHandle(sf::Event& e) {
 void MainWindow::RenderFood() {
   for (auto&& p : simulation_.GetField().GetEats()) {
     float radius = transformer_.Scale(10);
-    if (radius < 1) radius = 1;
     sf::CircleShape shape(radius);
     shape.setFillColor(sf::Color::Yellow);
     shape.setOrigin(radius, radius);
@@ -44,10 +43,9 @@ void MainWindow::RenderFood() {
 
 void MainWindow::RenderBactery() {
   for (auto&& p : simulation_.GetField().GetBacterium()) {
-    float radius = transformer_.Scale(60 * p->GetEnergy() / 100);
-    if (radius < 1) radius = 1;
+    float radius = transformer_.Scale(20 * p->GetEnergy() / 100);
     sf::CircleShape shape(radius);
-    shape.setFillColor(p->GetColor());
+    shape.setFillColor(sf::Color::Green);
     // shape.setOutlineColor(sf::Color::White);
     // shape.setOutlineThickness(transformer_.Scale(2));
     shape.setOrigin(radius, radius);
