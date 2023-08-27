@@ -8,7 +8,9 @@ Simulation::Simulation() {}
 
 void Simulation::SetCore(std::shared_ptr<Core> core) { core_ = core; }
 
-void Simulation::ReStart() { field_.GetObjects() = core_->FirstGeneration(); }
+void Simulation::ReStart() {
+  field_.GetObjects() = core_->FirstGeneration(field_);
+}
 
 void Simulation::Start(float delta_time) {
   /*

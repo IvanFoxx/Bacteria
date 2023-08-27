@@ -6,7 +6,7 @@
 class Object {
  public:
   Object(const Field &field, bool primary, bool collider);
-  virtual ~Object() = 0;
+  virtual ~Object();
 
   bool GetAlive() const;
   void SetAlive(bool value);
@@ -30,6 +30,8 @@ class Object {
   void SetRadius(float value);
 
   void Move(float x, float y);
+
+  const Field &GetField() const;
 
  private:
   bool alive_ = true;

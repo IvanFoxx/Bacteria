@@ -3,17 +3,21 @@
 Bacterium::Bacterium(const Field &field, const Network &net)
     : Object(field, true, true), network_(net) {}
 
-float Bacterium::GetEnergy() const { return energy_; }
+Bacterium::~Bacterium() {}
 
 Network Bacterium::GetNetwork() { return network_; }
 
-void Bacterium::Play(float delta_time) {
+void Bacterium::SetNetwork(const Network &net) { network_ = net; }
+
+void Bacterium::Collision(std::shared_ptr<Object> with) {}
+
+void Bacterium::Tick(float delta) {
   /*
-  Eigen::VectorXf input(2);
-  // input(0) = energy_;
-  // input(0) = x_ / field_.GetRange();
-  // input(1) = y_ / field_.GetRange();
-  float mind = std::numeric_limits<float>::max();
+   Eigen::VectorXf input(2);
+   input(0) = energy_;
+   input(0) = x_ / field_.GetRange();
+    input(1) = y_ / field_.GetRange();
+   float mind = std::numeric_limits<float>::max();
   if (field_.GetEats().size() != 0) {
     std::shared_ptr<Food> cFood;
     for (auto food : field_.GetEats()) {
@@ -37,15 +41,15 @@ void Bacterium::Play(float delta_time) {
 
   x_ += speed_x;
   y_ += speed_y;
+  */
 
-  x_ = std::min<float>(x_, field_.GetRange());
-  y_ = std::min<float>(y_, field_.GetRange());
+  SetX(std::min<float>(GetX(), GetField().GetRange()));
+  SetY(std::min<float>(GetY(), GetField().GetRange()));
 
-  x_ = std::max<float>(x_, -field_.GetRange());
-  y_ = std::max<float>(y_, -field_.GetRange());
+  SetX(std::max<float>(GetX(), -GetField().GetRange()));
+  SetY(std::max<float>(GetY(), -GetField().GetRange()));
 
-  energy_ -= 5 * delta_time;
-  // energy_ = std::min<float>(energy_, 1000);
+  energy_ -= 5 * delta;
   energy_ = std::max<float>(energy_, 0);
-*/
+  if (energy_ == 0) SetAlive(false);
 }

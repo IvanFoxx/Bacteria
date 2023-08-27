@@ -3,6 +3,8 @@
 Object::Object(const Field &field, bool primary, bool collider)
     : primary_(primary), collider_(collider), field_(field) {}
 
+Object::~Object() {}
+
 bool Object::GetAlive() const { return alive_; }
 
 void Object::SetAlive(bool value) { alive_ = value; }
@@ -31,3 +33,5 @@ void Object::Move(float x, float y) {
   x_ += x;
   y_ += y;
 }
+
+const Field &Object::GetField() const { return field_; }

@@ -10,13 +10,13 @@
 class Bacterium : public Object {
  public:
   Bacterium(const Field &field, const Network &net);
-
-  float GetEnergy() const;
+  virtual ~Bacterium();
 
   Network GetNetwork();
   void SetNetwork(const Network &);
 
-  void Play(float delta_time);
+  virtual void Collision(std::shared_ptr<Object> with);
+  virtual void Tick(float delta);
 
  private:
   float energy_ = 100;

@@ -24,6 +24,18 @@ void MainWindow::EventHandle(sf::Event& e) {
     last_x_ = e.mouseMove.x;
     last_y_ = e.mouseMove.y;
   }
+  if (e.type == sf::Event::KeyReleased && e.key.code == sf::Keyboard::Space) {
+    fast_mode_ = !fast_mode_;
+    window_.setFramerateLimit(fast_mode_ ? 2000 : 60);
+  }
+  if (e.type == sf::Event::KeyReleased) {
+    if (e.key.code == sf::Keyboard::Add) {
+      time_speed_ += 0.2;
+    } else if (e.key.code == sf::Keyboard::Subtract) {
+      if (time_speed_ > 0.2) time_speed_ -= 0.2;
+    }
+  }
+  if (e.type == sf::Event::Closed) window_.close();
 }
 
 void MainWindow::Render(std::vector<std::shared_ptr<Object>> objects) {
@@ -48,103 +60,55 @@ MainWindow::MainWindow(size_t width, size_t height)
       width_(width),
       height_(height) {
   window_.setFramerateLimit(60);
-  simulation_.InitRandomly();
 }
 
 int MainWindow::MainLoop() {
-  std::chrono::steady_clock::time_point begin =
-      std::chrono::steady_clock::now();
-  sf::CircleShape shape(100.f);
-  shape.setFillColor(sf::Color::Green);
   float range = simulation_.GetField().GetRange();
   sf::RectangleShape scene;
+  sf::CircleShape shape(100.f);
+  shape.setFillColor(sf::Color::Green);
 
   scene.setOutlineColor(sf::Color(125, 125, 125));
   scene.setFillColor(sf::Color(40, 40, 40));
   scene.setOutlineThickness(2);
 
   while (window_.isOpen()) {
+    auto begin = std::chrono::steady_clock::now();
+
     sf::Event event;
-    while (window_.pollEvent(event)) {
-      EventHandle(event);
-      if (event.type == sf::Event::KeyReleased &&
-          event.key.code == sf::Keyboard::Space) {
-        fast_mode_ = !fast_mode_;
-        window_.setFramerateLimit(fast_mode_ ? 2000 : 60);
-      }
-      if (event.type == sf::Event::KeyReleased) {
-        if (event.key.code == sf::Keyboard::Add) {
-          time_speed_ += 0.2;
-        } else if (event.key.code == sf::Keyboard::Subtract) {
-          if (time_speed_ > 0.2) time_speed_ -= 0.2;
-        }
-      }
-      if (event.type == sf::Event::Closed) window_.close();
-    }
+    while (window_.pollEvent(event)) EventHandle(event);
 
     window_.clear();
 
     scene.setSize(
         {transformer_.Scale(2 * range), transformer_.Scale(2 * range)});
-    scene.setPosition(
-        {transformer_.ScaleW(-range), transformer_.ScaleH(-range)});
+    scene.setPosition(transformer_.ScaleW(-range), transformer_.ScaleH(-range));
+
     window_.draw(scene);
 
-    RenderFood();
-    RenderBactery();
+    simulation_.Stop();
+
+    for (const auto& object : simulation_.GetField().GetObjects()) {
+      auto radius = object->GetRadius();
+      auto x = object->GetX();
+      auto y = object->GetY();
+
+      shape.setRadius(transformer_.Scale(radius));
+      shape.setPosition(transformer_.ScaleW(x), transformer_.ScaleH(y));
+      shape.setOrigin(transformer_.Scale(radius), transformer_.Scale(radius));
+
+      window_.draw(shape);
+    }
+
+    simulation_.Start(delta_time_);
 
     window_.display();
 
-    simulation_.Run(delta_time_ / time_speed_);
-    std::chrono::steady_clock::time_point end =
-        std::chrono::steady_clock::now();
+    auto end = std::chrono::steady_clock::now();
     delta_time_ =
-        (std::chrono::duration_cast<std::chrono::microseconds>(end - begin)
-             .count()) /
-        1000000.0;
+        std::chrono::duration_cast<std::chrono::duration<float>>(end - begin)
+            .count();
   }
 
   return 0;
 }
-/*
-if (core.get() == nullptr) {
-  RenderFileMenu();
-  return;
-}
-
-if (core->IsLoading()) {
-  DrawText(std::to_string(core->GetProgress()), sf::Color::Red, 40,
-           {width / 2.0f, height / 2.0f}, {0.5, 0.5});
-  window.display();
-  return;
-}
-
-DrawText(core->GetTimeDump(), sf::Color::White, 20);
-
-if (console_e) DrawText(console.Text(), sf::Color::White, 20, {0, 400});
-
-if (core->SlowDownWarning())
-  DrawText("Slow down error", sf::Color::Red, 40, {width / 2.0f, height / 2.0f},
-           {0.5, 1.35});
-
-DrawText(std::to_string(core->GetSpeed()), sf::Color::Red, 20,
-         {static_cast<float>(width), 0}, {1, 0});
-
-RenderPlanets();
-
-window.display();
-
-    void DrawText(std::string txt, sf::Color color, size_t size,
-                  sf::Vector2f position, sf::Vector2f relative_origin) {
-*/
-/*
-sf::Text text(txt, mfont, size);
-text.setFillColor(color);
-text.setStyle(sf::Text::Bold);
-
- sf::FloatRect textRect = text.getLocalBounds();
- text.setOrigin(textRect.width * relative_origin.x,
-                textRect.height * relative_origin.y);
- text.setPosition(position.x, position.y);
- window.draw(text);
-*/

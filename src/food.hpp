@@ -7,6 +7,10 @@
 class Food : public Object {
  public:
   Food(const Field &field);
+  ~Food();
+
+  virtual void Collision(std::shared_ptr<Object> with);
+  virtual void Tick(float delta);
 };
 
 #endif

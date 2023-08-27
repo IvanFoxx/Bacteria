@@ -10,7 +10,7 @@
 class Network final {
  public:
   Network(std::vector<int> layers_sizes);
-  Network(const Network& other) = default;
+  // Network(const Network& other) = default;
 
   Eigen::VectorXf Calculate(const Eigen::VectorXf& input) const;
 

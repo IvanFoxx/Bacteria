@@ -5,7 +5,8 @@
 
 class Core {
  public:
-  virtual std::vector<std::shared_ptr<Object>> FirstGeneration() const;
+  virtual std::vector<std::shared_ptr<Object>> FirstGeneration(
+      const Field& field) const;
   virtual std::vector<std::shared_ptr<Object>> Step(
       std::vector<std::shared_ptr<Object>> last_gen) const;
 };
