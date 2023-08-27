@@ -20,9 +20,6 @@ class MainWindow {
   void DrawText(std::string txt, sf::Color color, size_t size,
                 sf::Vector2f position = {0, 0},
                 sf::Vector2f relative_origin = {0, 0});
-
-  void Render(std::vector<std::shared_ptr<Object>> objects);
-
  private:
   Simulation simulation_;
   PTransformer transformer_;

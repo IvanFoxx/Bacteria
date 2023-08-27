@@ -38,28 +38,13 @@ void MainWindow::EventHandle(sf::Event& e) {
   if (e.type == sf::Event::Closed) window_.close();
 }
 
-void MainWindow::Render(std::vector<std::shared_ptr<Object>> objects) {
-  for (auto&& object : objects) {
-    float radius = transformer_.Scale(object->GetRadius());
-    sf::CircleShape shape(radius);
-    shape.setFillColor(sf::Color::Green);
-    shape.setOrigin(radius, radius);
-    sf::Vector2f after(transformer_.ScaleW(object->GetX()),
-                       transformer_.ScaleH(object->GetY()));
-    if (after.x + radius < 0.0 || after.x - radius > width_ ||
-        after.y + radius < 0.0 || after.y - radius > height_)
-      continue;
-    shape.setPosition(after);
-    window_.draw(shape);
-  }
-}
-
 MainWindow::MainWindow(size_t width, size_t height)
     : transformer_(width, height),
       window_(sf::VideoMode(width, height), "Bacteries"),
       width_(width),
       height_(height) {
   window_.setFramerateLimit(60);
+  simulation_.SetCore(std::make_shared<Core>());
 }
 
 int MainWindow::MainLoop() {
@@ -71,6 +56,8 @@ int MainWindow::MainLoop() {
   scene.setOutlineColor(sf::Color(125, 125, 125));
   scene.setFillColor(sf::Color(40, 40, 40));
   scene.setOutlineThickness(2);
+
+  simulation_.ReStart();
 
   while (window_.isOpen()) {
     auto begin = std::chrono::steady_clock::now();

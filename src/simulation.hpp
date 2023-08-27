@@ -6,9 +6,9 @@
 class Core {
  public:
   virtual std::vector<std::shared_ptr<Object>> FirstGeneration(
-      const Field& field) const;
+      const Field& field) const = 0;
   virtual std::vector<std::shared_ptr<Object>> Step(
-      std::vector<std::shared_ptr<Object>> last_gen) const;
+      std::vector<std::shared_ptr<Object>> last_gen) const = 0;
 };
 
 class Simulation {
