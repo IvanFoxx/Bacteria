@@ -15,7 +15,7 @@ The Bacteria Simulation Project is a C++ program that utilizes genetic algorithm
 ## Installation
 To install the Bacteria Simulation Project, follow these steps:
 
-1. Clone the repository: `git clone https://github.com/Ivanko09/Bacteria.git`
+1. Clone the repository: `git clone https://github.com/IvanFoxx/Bacteria.git`
 2. Navigate to the project directory: `cd Bacteria`
 3. Create a build directory: `mkdir build && cd build`
 4. Install dependencies using Conan: `conan install ..`
@@ -53,7 +53,7 @@ Contributions are welcome! To contribute to the project:
 This project is licensed under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for more details.
 
 ## Contact
-If you have questions, feedback, or suggestions, please open an issue in the [Issues](https://github.com/Ivanko09/Bacteria/issues) section.
+If you have questions, feedback, or suggestions, please open an issue in the [Issues](https://github.com/IvanFoxx/Bacteria/issues) section.
 
 ## Acknowledgments
 We extend our gratitude to the open-source community for inspiring and enabling the development of this project.
